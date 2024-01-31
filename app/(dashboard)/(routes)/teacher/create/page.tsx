@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   title: z.string().min(3, { message: "title is REQUIRED" }).max(255),
@@ -39,6 +40,7 @@ const CreatePage = () => {
       router.push(`/dashboard/courses/${response.data.id}`);
     } catch (error) {
       console.log("error", error);
+      toast.error("코스 생성에 실패했습니다.");
     }
   };
 
