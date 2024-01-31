@@ -15,9 +15,9 @@ const SidebarItem = ({ href, icon: Icon, label }: SidebarItemProps) => {
   const router = useRouter(); // next/router아님에 유의
 
   const isActive =
-    (pathname === "/" && href === "/") ||
-    pathname === href ||
-    pathname?.startsWith(`${href}/`);
+    (pathname === "/" && href === "/") || // 둘다 /일때
+    pathname === href || // 정확히 일치
+    pathname?.startsWith(`${href}/`); // 하위페이지까지
 
   const handleClick = () => {
     router.push(href);
@@ -40,6 +40,13 @@ const SidebarItem = ({ href, icon: Icon, label }: SidebarItemProps) => {
         />
       </div>
       {label}
+
+      <div
+        className={cn(
+          "ml-auto opacity-0 border-2 border-sky-700 h-full",
+          isActive && "opacity-100"
+        )}
+      />
     </button>
   );
 };
