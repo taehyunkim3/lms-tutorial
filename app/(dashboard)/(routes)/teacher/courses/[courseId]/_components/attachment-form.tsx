@@ -16,7 +16,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { File, ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import { File, ImageIcon, Loader2, Pencil, PlusCircle, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,7 @@ export const AttachmentForm = ({
   courseId,
 }: AttachmentFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -63,6 +64,20 @@ export const AttachmentForm = ({
     } catch (error) {
       console.log("error", error);
       toast.error("저장에 실패했습니다");
+    }
+  };
+
+  const onDelete = async (id: string) => {
+    try {
+      setDeletingId(id);
+      await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
+      toast.success("삭제되었습니다");
+      router.refresh();
+    } catch (error) {
+      console.log("error", error);
+      toast.error("삭제에 실패했습니다");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -104,6 +119,18 @@ export const AttachmentForm = ({
             >
               <File className="h-4 w-4 mr-2" />
               <p className="text-xs line-clamp-1"> {attachment.name}</p>
+              {deletingId === attachment.id ? (
+                <div>
+                  <Loader2 className="h-4 w-4 mr-2" />
+                </div>
+              ) : (
+                <button
+                  className="ml-auto hover:opacity-75 transition"
+                  onClick={() => onDelete(attachment.id)}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
           ))}
         </div>
