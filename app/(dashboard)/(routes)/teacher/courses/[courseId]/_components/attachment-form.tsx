@@ -1,0 +1,130 @@
+"use client";
+
+import * as z from "zod";
+import { useState } from "react";
+import axios from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { File, ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import { Course, Attachment } from "@prisma/client";
+import Image from "next/image";
+import { FileUpload } from "@/components/file-upload";
+
+interface AttachmentFormProps {
+  initialData: Course & { attachments: Attachment[] };
+  courseId: string;
+}
+
+const formSchema = z.object({
+  url: z.string().min(1),
+});
+
+export const AttachmentForm = ({
+  initialData,
+  courseId,
+}: AttachmentFormProps) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const toggleEditing = () => {
+    setIsEditing((prev) => !prev);
+  };
+
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      url: initialData?.attachments || [],
+    },
+  });
+
+  const { isSubmitting, isValid } = form.formState;
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await axios.post(`/api/courses/${courseId}/attachments`, values);
+      setIsEditing(false);
+      router.refresh();
+    } catch (error) {
+      console.log("error", error);
+      toast.error("저장에 실패했습니다");
+    }
+  };
+
+  return (
+    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+      <div className="flex items-center justify-between font-medium">
+        Course Attachment
+        <Button variant={"ghost"} onClick={toggleEditing}>
+          {isEditing && <>cancel</>}
+          {!isEditing && !initialData.attachments && (
+            <>
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add an image
+            </>
+          )}
+          {!isEditing && initialData.attachments && (
+            <>
+              <Pencil className="h-4 w-4 mr-2" />
+              Edit Attachment
+            </>
+          )}
+        </Button>
+      </div>
+      {!isEditing && (
+        <>
+          {initialData.attachments.length === 0 && (
+            <div className="text-sm mt-2 text-slate-500 italic">
+              No Attachment
+            </div>
+          )}
+        </>
+      )}
+      {!isEditing && initialData.attachments.length > 0 && (
+        <div className="space-y-2">
+          {initialData.attachments.map((attachment: Attachment) => (
+            <div
+              key={attachment.id}
+              className="flex items-center p-3 w-full bg-sky-100 border-sky-200 border text-sky-700 rounded-md"
+            >
+              <File className="h-4 w-4 mr-2" />
+              <p className="text-xs line-clamp-1"> {attachment.name}</p>
+            </div>
+          ))}
+        </div>
+      )}
+      {isEditing && (
+        <div>
+          <FileUpload
+            endpoint="courseAttachment"
+            onChange={(url) => {
+              if (url) {
+                onSubmit({
+                  url,
+                });
+              }
+            }}
+          />
+          <div className="text-xs text-muted-foreground mt-4">
+            Add anything you want to share with your students.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
