@@ -37,7 +37,7 @@ const CreatePage = () => {
     try {
       const response = await axios.post("/api/courses", values);
       console.log(response);
-      router.push(`/dashboard/courses/${response.data.id}`);
+      router.push(`/teacher/courses/${response.data.id}`);
       toast.success("코스가 생성되었습니다.");
     } catch (error) {
       console.log("error", error);
