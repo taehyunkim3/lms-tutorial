@@ -4,6 +4,8 @@ import { auth } from "@clerk/nextjs";
 import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 
+import { TitleForm } from "./_components/title-form";
+
 const CourseIdPage = async ({
   params,
 }: {
@@ -44,9 +46,9 @@ const CourseIdPage = async ({
     <div className="p-6">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-medium">{course.title}</h1>
+          <h1 className="text-2xl font-medium">코스 생성 / 수정</h1>
           <span className="text-sm text-slate-500">
-            complete all fields {completionText}
+            입력을 완료해주세요. {completionText}
           </span>
         </div>
       </div>
@@ -56,6 +58,7 @@ const CourseIdPage = async ({
             <IconBadge size={"sm"} variant={"success"} icon={LayoutDashboard} />
             <h2 className="text-lg font-medium">Customise your course</h2>
           </div>
+          <TitleForm initialData={course} courseId={course.id} />
         </div>
       </div>
     </div>
