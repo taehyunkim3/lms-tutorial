@@ -32,6 +32,7 @@ const ChapterActions = ({
           `/api/courses/${courseId}/chapters/${chapterId}/unpublish`
         );
         toast.success("chapater unpublished");
+        router.refresh();
       } else {
         await axios.patch(
           `/api/courses/${courseId}/chapters/${chapterId}/publish`
