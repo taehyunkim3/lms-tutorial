@@ -1,4 +1,4 @@
-const ChapterIdPage = ({
+const ChapterIdPage = async ({
   params,
 }: {
   params: { chapterId: string; courseId: string };
