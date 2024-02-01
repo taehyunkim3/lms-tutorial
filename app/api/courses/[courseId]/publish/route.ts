@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
+import { Chapter } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -30,20 +31,54 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const publishedChapters = await db.chapter.findMany({
+    // const publishedChapters = await db.chapter.findMany({
+    //   where: {
+    //     courseId: params.courseId,
+    //     isPublished: true,
+    //   },
+    // });
+
+    // if (!publishedChapters.length) {
+    //   return new NextResponse("Cannot Publish", { status: 400 });
+    // }
+
+    const course = await db.course.findUnique({
       where: {
-        courseId: params.courseId,
-        isPublished: true,
+        id: params.courseId,
+      },
+      include: {
+        chapters: {
+          include: {
+            muxData: true,
+          },
+        },
       },
     });
 
-    if (!publishedChapters.length) {
-      return new NextResponse("Cannot Publish", { status: 400 });
+    if (!course) {
+      return new NextResponse("Not Found Course", { status: 404 });
+    }
+
+    const hasPublishedCouses = course.chapters?.some(
+      (chapter: Chapter) => chapter.isPublished
+    );
+
+    if (
+      !hasPublishedCouses ||
+      !course.title ||
+      !course.description ||
+      !course.categoryId ||
+      !course.imgUrl
+    ) {
+      return new NextResponse("Cannot Publish, Missing Required", {
+        status: 403,
+      });
     }
 
     const publishedCourse = await db.course.update({
       where: {
         id: params.courseId,
+        userId,
       },
       data: {
         isPublished: true,
@@ -52,6 +87,7 @@ export async function PATCH(
 
     return NextResponse.json(publishedCourse);
   } catch (error) {
+    console.log("[COURSE_ID_PUBLISH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

@@ -30,18 +30,7 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // const publishedChapters = await db.chapter.findMany({
-    //   where: {
-    //     courseId: params.courseId,
-    //     isPublished: true,
-    //   },
-    // });
-
-    // if (!publishedChapters.length) {
-    //   return new NextResponse("Cannot Publish", { status: 400 });
-    // }
-
-    const publishedCourse = await db.course.update({
+    const unPublishedCourse = await db.course.update({
       where: {
         id: params.courseId,
       },
@@ -50,8 +39,9 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(publishedCourse);
+    return NextResponse.json(unPublishedCourse);
   } catch (error) {
+    console.log("[COURSE_ID_UNPUBLISH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
