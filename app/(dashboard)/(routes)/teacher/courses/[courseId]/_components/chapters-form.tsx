@@ -16,11 +16,10 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2, Pencil, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
 import { Course, Chapter } from "@prisma/client";
 import ChaptersList from "./chapters-list";
 
