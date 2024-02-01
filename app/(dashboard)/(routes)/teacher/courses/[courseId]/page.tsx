@@ -18,6 +18,7 @@ import { AttachmentForm } from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-form";
 import { Chapter } from "@prisma/client";
 import { Banner } from "@/components/banner";
+import Actions from "./_components/actions";
 
 const CourseIdPage = async ({
   params,
@@ -91,7 +92,11 @@ const CourseIdPage = async ({
               입력을 완료해주세요. {completionText}
             </span>
           </div>
-          {/* TODO: ADD Actions */}
+          <Actions
+            disabled={!isComplete}
+            courseId={params.courseId}
+            isPublished={course.isPublished}
+          />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
