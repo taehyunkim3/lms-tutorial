@@ -36,7 +36,7 @@ const ChapterIdPage = async ({
     return redirect("/");
   }
 
-  const requiredFields = [chapter.title, chapter.videoUrl, chapter.descroption];
+  const requiredFields = [chapter.title, chapter.videoUrl, chapter.description];
 
   const totalRequiredFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
