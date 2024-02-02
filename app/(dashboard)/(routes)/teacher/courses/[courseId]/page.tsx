@@ -110,7 +110,7 @@ const CourseIdPage = async ({
             <CategoryForm
               initialData={course}
               courseId={course.id}
-              options={categories.map((category: any) => {
+              options={categories.map((category) => {
                 return { label: category.name, value: category.id };
               })}
             />

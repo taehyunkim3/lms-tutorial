@@ -16,11 +16,11 @@ const CoursesList = ({
             key={course.id}
             id={course.id}
             title={course.title}
-            imgUrl={course.imgUrl}
+            imgUrl={course.imgUrl!}
             chapterLength={course.chapters.length}
-            price={course.price}
-            progress={course.progress}
-            category={course?.category?.name}
+            price={course.price!}
+            progress={course.progress!}
+            category={course?.category?.name!}
           />
         ))}
       </div>

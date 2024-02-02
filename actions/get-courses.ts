@@ -51,8 +51,8 @@ export const getCourses = async ({
 
     const coursesWithProgress: CourseWithProgressWithCategory[] =
       await Promise.all(
-        courses.map(async (course: any) => {
-          // FIXME: prisma에서 타입을 못불러옴 :원인불명.
+        courses.map(async (course) => {
+          // FIXME: prisma에서 타입을 못불러옴 :원인불명. -> package.json 다시 설정후 해결됨.
           if (course.purchases.length === 0) {
             return {
               ...course,
