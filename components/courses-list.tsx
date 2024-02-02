@@ -9,7 +9,7 @@ const CoursesList = ({
 }) => {
   return (
     <div>
-      <div className="">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid=cols-4 2xl:grid-cols-4 gap-4">
         {courses.map((course) => (
           // <div key={course.id}>{course.title}</div>
           <CourseCard
