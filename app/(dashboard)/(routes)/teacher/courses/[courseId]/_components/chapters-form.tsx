@@ -24,7 +24,7 @@ import { Course, Chapter } from "@prisma/client";
 import ChaptersList from "./chapters-list";
 
 interface ChaptersFormProps {
-  initialData: Course & { chanpters: Chapter[] };
+  initialData: Course & { chapters: Chapter[] };
   courseId: string;
 }
 
