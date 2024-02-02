@@ -14,7 +14,7 @@ type GetCourses = {
   categoryId?: string;
 };
 
-export const getCounses = async ({
+export const getCourses = async ({
   userId,
   title,
   categoryId,
