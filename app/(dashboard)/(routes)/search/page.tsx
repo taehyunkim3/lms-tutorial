@@ -1,13 +1,32 @@
 import { db } from "@/lib/db";
 import Categories from "./_components/categories";
 import SearchInput from "@/components/search-input";
+import { getCourses } from "@/actions/get-courses";
+import { auth } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
-const SearchPage = async () => {
+interface SearchPageProps {
+  searchParams: {
+    // SearchParams에서 가져옴
+    title: string;
+    categoryId: string;
+  };
+}
+
+const SearchPage = async ({ searchParams }: SearchPageProps) => {
+  const { userId } = auth();
+
+  if (!userId) {
+    return redirect("/");
+  }
+
   const categories = await db.category.findMany({
     orderBy: {
       name: "desc",
     },
   });
+
+  const courses = getCourses({ userId, ...searchParams });
 
   return (
     <>
@@ -16,6 +35,7 @@ const SearchPage = async () => {
       </div>
       <div className="p-6">
         <Categories items={categories} />
+        <CoursesList courses={courses} />
       </div>
     </>
   );
