@@ -7,22 +7,18 @@ const backgroundVariants = cva(
   {
     variants: {
       variant: {
-        defalut: "bg-sky-100",
+        default: "bg-sky-100",
         success: "bg-green-100",
       },
-      // iconVariant:{
-      //     defalut:'text-sky-700',
-      //     success:'text-green-700',
-      // },
+
       size: {
-        defalut: "p-2",
+        default: "p-2",
         sm: "p-1",
       },
     },
     defaultVariants: {
-      variant: "defalut",
-      // iconVariant:'defalut',
-      size: "defalut",
+      variant: "default",
+      size: "default",
     },
   }
 );
@@ -30,17 +26,17 @@ const backgroundVariants = cva(
 const iconVariants = cva("", {
   variants: {
     variant: {
-      defalut: "text-sky-700",
+      default: "text-sky-700",
       success: "text-green-700",
     },
     size: {
-      defalut: "h-8 w-8",
+      default: "h-8 w-8",
       sm: "h-4 w-4",
     },
   },
   defaultVariants: {
-    variant: "defalut",
-    size: "defalut",
+    variant: "default",
+    size: "default",
   },
 });
 
