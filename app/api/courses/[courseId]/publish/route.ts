@@ -1,6 +1,5 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
-import { Chapter } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -60,7 +59,7 @@ export async function PATCH(
     }
 
     const hasPublishedCouses = course.chapters?.some(
-      (chapter: Chapter) => chapter.isPublished
+      (chapter) => chapter.isPublished
     );
 
     if (

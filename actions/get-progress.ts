@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { Chapter } from "@prisma/client";
 
 export const getProgress = async (
   userId: string,
@@ -16,9 +15,7 @@ export const getProgress = async (
       },
     });
 
-    const publishedChapterIds = publishedChapters.map(
-      (chapter: Chapter) => chapter.id
-    );
+    const publishedChapterIds = publishedChapters.map((chapter) => chapter.id);
 
     const validCompletedChapters = await db.userProgress.count({
       where: {
