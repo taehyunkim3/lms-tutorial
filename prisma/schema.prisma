@@ -6,34 +6,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["fullTextSearch","fullTextIndex"]
-}
-
-
-model Attachment {
-  id String @id @default(uuid())
-  name String
-  url String @db.Text
-
-  courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([courseId])
-}
-
-model Category {
-  id String @id @default(uuid())
-  name String
-  description String? @db.Text
-  imgUrl String? @db.Text
-
-  courses Course[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 model Course {
@@ -52,12 +25,31 @@ model Course {
   attachments Attachment[]
   purchases Purchase[]
 
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([categoryId])
   @@fulltext([title])
+}
+
+model Category {
+  id String @id @default(uuid())
+  name String @unique
+  courses Course[]
+}
+
+model Attachment {
+  id String @id @default(uuid())
+  name String
+  url String @db.Text
+
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
 }
 
 model Chapter {
@@ -72,8 +64,7 @@ model Chapter {
   muxData MuxData?
 
   courseId String
-  course Course @relation(fields:[courseId], references: [id], onDelete: Cascade)
-
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   userProgress UserProgress[]
 
@@ -89,16 +80,15 @@ model MuxData {
   playbackId String?
 
   chapterId String @unique
-  chapter Chapter @relation(fields:[chapterId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
-
 
 model UserProgress {
   id String @id @default(uuid())
   userId String
 
   chapterId String
-  chapter Chapter @relation(fields:[chapterId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   isCompleted Boolean @default(false)
 
@@ -109,18 +99,17 @@ model UserProgress {
   @@unique([userId, chapterId])
 }
 
-
-
 model Purchase {
   id String @id @default(uuid())
   userId String
 
   courseId String
-  course Course @relation(fields:[courseId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt()
 
+  @@unique([userId, courseId])
   @@index([courseId])
 }
 

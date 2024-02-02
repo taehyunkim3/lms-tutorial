@@ -1,6 +1,6 @@
-import { db } from "@/lib/db";
 import { Category, Course } from "@prisma/client";
 import { getProgress } from "./get-progress";
+import { db } from "@/lib/db";
 
 export type CourseWithProgressWithCategory = Course & {
   category: Category | null;
@@ -52,6 +52,7 @@ export const getCourses = async ({
     const coursesWithProgress: CourseWithProgressWithCategory[] =
       await Promise.all(
         courses.map(async (course: any) => {
+          // FIXME: prisma에서 타입을 못불러옴 :원인불명.
           if (course.purchases.length === 0) {
             return {
               ...course,
