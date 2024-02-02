@@ -4,6 +4,7 @@ import SearchInput from "@/components/search-input";
 import { getCourses } from "@/actions/get-courses";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
+import CoursesList from "./_components/courses-list";
 
 interface SearchPageProps {
   searchParams: {
@@ -26,7 +27,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
     },
   });
 
-  const courses = getCourses({ userId, ...searchParams });
+  const courses = await getCourses({ userId, ...searchParams });
 
   return (
     <>

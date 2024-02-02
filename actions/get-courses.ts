@@ -2,10 +2,10 @@ import { db } from "@/lib/db";
 import { Category, Course } from "@prisma/client";
 import { getProgress } from "./get-progress";
 
-type CourseWithProgressWithCategory = Course & {
+export type CourseWithProgressWithCategory = Course & {
   category: Category | null;
   chapters: { id: string }[];
-  progerss: number | null;
+  progress: number | null;
 };
 
 type GetCourses = {
@@ -18,7 +18,7 @@ export const getCourses = async ({
   userId,
   title,
   categoryId,
-}: GetCourses): Promise<CourseWithProgressWithCategory> => {
+}: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
   try {
     const courses = await db.course.findMany({
       where: {
@@ -38,16 +38,24 @@ export const getCourses = async ({
             id: true,
           },
         },
+        purchases: {
+          where: {
+            userId,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
-    const coursesWithProgress: CourseWithProgressWithCategory =
+    const coursesWithProgress: CourseWithProgressWithCategory[] =
       await Promise.all(
-        courses.map(async (course: Course) => {
-          if (courses.pruchase.length === 0) {
+        courses.map(async (course: any) => {
+          if (course.purchases.length === 0) {
             return {
               ...course,
-              progress: 0,
+              progress: null,
             };
           }
 
