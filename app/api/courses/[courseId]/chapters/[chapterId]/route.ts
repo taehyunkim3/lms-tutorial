@@ -132,7 +132,9 @@ export async function PATCH(
       });
 
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
+        // await Video.Assets.del(existingMuxData.assetId);
+        //FIXME: video 자산이 text버전이라 24시간 있으면 다 지워져서 여기서 오류남.
+        //여기를 선택조건으로 수정해야할듯 함.
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
