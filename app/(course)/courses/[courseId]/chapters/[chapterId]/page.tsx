@@ -69,7 +69,7 @@ const ChapterIdPage = async ({
             <CourseProgressButton
               chapterId={params.chapterId}
               courseId={params.courseId}
-              nextChapterId={nextChapter.id}
+              nextChapterId={nextChapter?.id}
               isCompleted={!!userProgress?.isCompleted}
             />
           ) : (
