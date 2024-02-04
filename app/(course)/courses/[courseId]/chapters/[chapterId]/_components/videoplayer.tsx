@@ -9,6 +9,7 @@ import { Loader2, Lock } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useConfettiStore } from "@/hooks/use-confetti-store";
+import { title } from "process";
 
 interface VideoPlayerProps {
   chapterId: string;
@@ -29,6 +30,8 @@ const VideoPlayer = ({
   isLocked,
   completeOnEnd,
 }: VideoPlayerProps) => {
+  const [isReady, setIsReady] = useState(false);
+
   return (
     <div className="relative aspect-video">
       {!isLocked && (
@@ -41,6 +44,16 @@ const VideoPlayer = ({
           <Lock className="h-8 w-8" />
           <p className="text-sm">구매 후 시청 가능합니다.</p>
         </div>
+      )}
+      {!isLocked && (
+        <MuxPlayer
+          title={title}
+          className={cn(!isReady && "hidden")}
+          onCanPlay={() => setIsReady(true)}
+          onEnded={() => {}}
+          autoPlay
+          playbackId={playbackId}
+        />
       )}
     </div>
   );
