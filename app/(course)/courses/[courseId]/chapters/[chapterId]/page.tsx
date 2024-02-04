@@ -31,6 +31,9 @@ const ChapterIdPage = async ({
     chapterId: params.chapterId,
   });
 
+  if (!chapter || !course) {
+    return redirect("/");
+  }
   const isLocked = !chapter?.isFree && !purchase;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
   //FIXME: userProgress?.isCompleted 앞에 !가 없어야하는거 아닌가?
@@ -47,10 +50,10 @@ const ChapterIdPage = async ({
         <div className="p-4">
           <VideoPlayer
             chapterId={params.chapterId}
-            title={chapter?.title}
+            title={chapter.title}
             courseId={params.courseId}
             nextChapterId={nextChapter?.id}
-            playbackId={muxData?.playbackId}
+            playbackId={muxData?.playbackId!}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
           />
